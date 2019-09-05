@@ -1,16 +1,26 @@
 {
   "name": "transparent-redis-layer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "redis",
+    "transparent"
+  ],
+  "author": "cool-firer",
+  "license": "MIT",
   "devDependencies": {
     "ioredis": "^4.14.0",
     "mocha": "^6.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cool-firer/transparent-redis-layer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cool-firer/transparent-redis-layer/issues"
   }
 }
