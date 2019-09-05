@@ -10,7 +10,7 @@ $ npm install transparent-redis-layer
 ## Usage
 
 
-try to get redis data, if key not exists, fill the data to the correspoding key.
+try to get redis data, if key not exists, fill the data to the corresponding key.
 
 ## Example
 
