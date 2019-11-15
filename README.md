@@ -106,9 +106,9 @@ See `test.js` for more examples.
 
 ## Updates
 
--  1.0.3
+1.0.3
 
-  Add assert function，customize check function whether to fill data or not.
+- Add assert function，customize check function whether to fill data or not.
 
 
 
