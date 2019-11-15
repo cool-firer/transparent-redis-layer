@@ -73,6 +73,26 @@ describe('', function() {
       .exec();
   });
 
+  it('assert fn', async function() {
+    const cacheLayer = new CacheLayer();
+    await cacheLayer.redisClient(redis)
+    .cache('test:assertFn')
+    .from('123')
+    .exec();
+
+    await cacheLayer
+      .cache('test:assertFn')
+      .actionForGet('get')        // get test:
+      .assert(async function(res) {
+        return res === '345';   // if test:parameters is not 345, then set test:parameters 345
+      })
+      .actionForSet('set')  // set test:parameters 123
+      .from(async function() {
+        return '345';
+      })
+      .exec();
+  });
+
   it('change another redis client', async function () {
     const cacheLayer = new CacheLayer();
     await cacheLayer.redisClient(redis)

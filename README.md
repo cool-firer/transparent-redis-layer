@@ -81,9 +81,36 @@ const res = await cacheLayer
   .from('i am string')
   .exec();
 
+// customize check function
+const cacheLayer = new CacheLayer();
+await cacheLayer.redisClient(redis)
+  .cache('test:assertFn') // first, put a key
+  .from('123')
+  .exec();
+
+await cacheLayer
+  .cache('test:assertFn')
+  .actionForGet('get')        // get test:assertFn
+  .assert(async function(res) {
+   	return res === '345';   // if test:parameters is not 345, then set test:parameters 345
+   })
+  .actionForSet('set')  // set test:parameters 123
+  .from(async function() {
+   	return '345';
+   })
+  .exec();
+
 ```
 
 See `test.js` for more examples.
+
+## Updates
+
+-  1.0.3
+
+  Add assert function，customize check function whether to fill data or not.
+
+
 
 ## License
 

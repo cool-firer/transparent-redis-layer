@@ -12,6 +12,7 @@ class CacheLayer {
     this.setActionArgs = [];
     this.client = null;
     this.dataSource = null;
+    this.assertFn = null;
   }
 
   redisClient(redisClient) {
@@ -49,6 +50,11 @@ class CacheLayer {
     return this;
   }
 
+  assert(fn) {
+    this.assertFn = fn;
+    return this;
+  }
+
   actionForSet(action, ...args) {
     this.setAction = action;
     this.setActionArgs = args;
@@ -64,11 +70,14 @@ class CacheLayer {
     assert(this.key, 'key cannot be empty string or undefined or null');
     try {
       const res = await this.client[this.getAction](this.key, ...this.getActionArgs);
-      if (!CacheLayer.isEmpty(res)) return res;
-  
+      if (!CacheLayer.isEmpty(res)) {
+        if (!this.assertFn) return res;
+        const assertRes = await this.assertFn(res);
+        if (assertRes) return res;
+      }
       const type = typeof this.dataSource;
       // normal type
-      if(['number', 'string'].includes(type)) {
+      if ([ 'number', 'string' ].includes(type)) {
         await this.client[this.setAction](this.key, this.dataSource, ...this.setActionArgs);
         return this.dataSource;
       }
@@ -87,7 +96,7 @@ class CacheLayer {
         return data;
       }
       return;
-    } catch(err) {
+    } catch (err) {
       throw err;
     } finally {
       this.key = '';
@@ -96,6 +105,7 @@ class CacheLayer {
       this.setAction = 'set';
       this.setActionArgs = [];
       this.dataSource = null;
+      this.assertFn = null;
     }
   }
 }
